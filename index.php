@@ -48,24 +48,25 @@ if(isset($_POST['email'])) {
 </head>
 <body class="text-center">
   <form class='form-signin' action='index.php' method='POST'>
-      <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
-      <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
-      <label for="inputEmail" class="sr-only">Email address</label>
-      <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" <?php if($email) echo "value='$email'"; ?> required autofocus>
-      <label for="inputPassword" class="sr-only">Password</label>
-      <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" <?php if($password) echo "value='$password'"; ?> required>
-      <?php
-        if($error) {
-          echo "<div class='form-text danger'>
-                  Your username or password is incorrect
-                </div>";
-        }
-      ?>
-      <button class="btn btn-lg btn-primary btn-block mt-2" type="submit">Sign in</button>
-      <label class="mt-3"><a href="register.php">Click here to register</a></label>
-      <p class="mt-5 mb-3 text-muted">&copy; 2018</p>
-    </form>
-  </body>
+    <h1 class="mb-4">Tenderoots</h1>
+    <img class="mb-5" src="https://coeduc.org/resources/images/icons/Roots.png" alt="" width="100" height="100">
+    <h1 class="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <label for="inputEmail" class="sr-only">Email address</label>
+    <input type="email" id="inputEmail" name="email" class="form-control" placeholder="Email address" <?php if($email) echo "value='$email'"; ?> required autofocus>
+    <label for="inputPassword" class="sr-only">Password</label>
+    <input type="password" id="inputPassword" name="password" class="form-control" placeholder="Password" <?php if($password) echo "value='$password'"; ?> required>
+    <?php
+      if($error) {
+        echo "<div class='form-text danger'>
+                Your username or password is incorrect
+              </div>";
+      }
+    ?>
+    <button class="btn btn-lg btn-primary btn-block mt-2" type="submit">Sign in</button>
+    <label class="mt-3"><a href="register.php">Click here to register</a></label>
+    <p class="mt-5 mb-3 text-muted">&copy; 2018</p>
+  </form>
+</body>
 </html>
 
 <?php closeDbConnection(); ?>

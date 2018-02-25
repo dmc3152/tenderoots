@@ -67,7 +67,8 @@ if(isset($_POST['email'])) {
 </head>
 <body class="text-center">
   <form class='form-register' action='register.php' method='POST'>
-    <img class="mb-4" src="https://getbootstrap.com/assets/brand/bootstrap-solid.svg" alt="" width="72" height="72">
+    <h1 class="mb-4">Tenderoots</h1>
+    <img class="mb-5" src="https://coeduc.org/resources/images/icons/Roots.png" alt="" width="100" height="100">
     <h1 class="h3 mb-3 font-weight-normal">Please register</h1>
     <!-- Email -->
     <div class="form-group">
