@@ -19,10 +19,15 @@ body {
 }
 
 .form-signin {
+  background-color: white;
   width: 100%;
-  max-width: 330px;
-  padding: 15px;
+  max-width: 450px;
+  padding: 20px 90px;
   margin: 0 auto;
+  border-radius: 10px;
+  border-left: 1px solid #dedede;
+  border-top: 1px solid #dedede;
+  box-shadow: 2px 5px 4px #888888;
 }
 .form-signin .checkbox {
   font-weight: 400;
@@ -49,10 +54,15 @@ body {
 }
 
 .form-register {
+  background-color: white;
   width: 100%;
-  max-width: 330px;
-  padding: 15px;
+  max-width: 450px;
+  padding: 20px 90px;
   margin: 0 auto;
+  border-radius: 10px;
+  border-left: 1px solid #dedede;
+  border-top: 1px solid #dedede;
+  box-shadow: 2px 5px 4px #888888;
 }
 .form-register .checkbox {
   font-weight: 400;
