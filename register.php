@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once("php/generalFunctions.php");
 require_once("php/dbFunctions.php");
 require_once("php/loginFunctions.php");
 connect2db();
@@ -36,18 +37,18 @@ if(isset($_POST['email'])) {
   
   // Add user details to database
   if($userId) {
-    $detailsError = addPerson("USR", $userId, $firstName, $lastName);
-    if($detailsError) {
+    $id = addPerson("USR", $userId, $firstName, $lastName);
+    if(!$id) {
       removeUserById($userId);  // removes user so it can be added later
     }
   }
 
   // Save variables and redirect to website
-  if(!$detailsError) {
+  if($id) {
     $_SESSION['firstName'] = $firstName;
     $_SESSION['lastName'] = $lastName;
-    $_SESSION['id'] = $userId;
-    header("Location: http://localhost/tenderoots/home/index.php");
+    $_SESSION['id'] = $id;
+    header("Location: " . BASE_URL . "tenderoots/home/index.php");
     exit();
   }
 }

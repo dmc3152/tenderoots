@@ -1,15 +1,16 @@
 <?php
 session_start();
 
-// Skip log in if the user is already logged in
-if(isset($_SESSION['id'])) {
-  header("Location: http://localhost/tenderoots/home/index.php");
-  exit();
-}
-
 // Get necessary files
+require_once("php/generalFunctions.php");
 require_once("php/dbFunctions.php");
 require_once("php/loginFunctions.php");
+
+// Skip log in if the user is already logged in
+if(isset($_SESSION['id'])) {
+  header("Location: " . BASE_URL . "tenderoots/home/index.php");
+  exit();
+}
 
 // Connect to the database
 connect2db();
@@ -24,8 +25,8 @@ if(isset($_POST['email'])) {
   if($user) {
     $_SESSION['firstName'] = $user['firstName'];
     $_SESSION['lastName'] = $user['lastName'];
-    $_SESSION['id'] = $user['personId'];
-    header("Location: http://localhost/tenderoots/home/index.php");
+    $_SESSION['id'] = $user['id'];
+    header("Location: " . BASE_URL . "tenderoots/home/index.php");
     exit();
   } else {
     $error = true;

@@ -1,17 +1,18 @@
 <?php
 session_start();
-
-echo $_SESSION['id'] . "<br>";
-echo $_SESSION['firstName'] . "<br>";
-echo $_SESSION['lastName'] . "<br>";
-
-// remove all session variables
-session_unset(); 
-
-// destroy the session 
-session_destroy(); 
+require_once("../php/generalFunctions.php");
+if(!isSignedIn()) sendToLogin();
 ?>
 
 <html>
-  <h1>IT WORKED!</h1>
+<head>
+  <?php include_once('./head/head.php'); ?>
+</head>
+<body>
+  <div class="app">
+    <?php include_once('./header/header.php'); ?>
+    <div id="content"></div>
+  </div>
+  <?php include_once('./foot/foot.php'); ?>
+</body>
 </html>

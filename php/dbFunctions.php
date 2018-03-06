@@ -55,7 +55,7 @@ function cleanMySQL($str) {
 }
 
 /**
- * Helper functin to execute mySQL queries
+ * Helper function to execute mySQL queries
  *
  * @param string $query
  * @return object
@@ -84,13 +84,28 @@ function getUserById($id) {
 }
 
 /**
+ * Gets user details by the user's by their id
+ *
+ * @param int $id
+ * @return object
+ */
+function getUserDetailsById($id) {
+  $query = "SELECT *
+            FROM `person_details`
+            WHERE id = $id";
+  $result = mysqlQuery($query);
+  if(!$result) return false;
+  return $result->fetch_assoc();
+}
+
+/**
  * Gets a user by their email
  *
  * @param string $email
  * @return object
  */
 function getUserByEmail($email) {
-  $query = "SELECT personPrefix, personId, firstName, lastName
+  $query = "SELECT personPrefix, person_details.id as id, firstName, lastName
             FROM `person_details`
             JOIN users
             ON users.id = person_details.personId
@@ -144,5 +159,30 @@ function addPerson($prefix, $id, $firstName, $lastName) {
   $stmt->bind_param('siss', $prefix, $id, $firstName, $lastName);
   $stmt->execute();
   $stmt->close();
-  return $con->error;
+  return $con->insert_id;
+}
+
+/**
+ * Updates fields in any table
+ *
+ * @param array $update
+ * @param string $conditionField
+ * @param string $condition
+ * @param string $table
+ * @return object
+ */
+function updateFields($update, $conditionField, $condition, $table) {
+  $iterations = count($update);
+  $updateString = "";
+  $i = 0;
+  foreach ($update as $key => $value) {
+    $updateString .= $key . "='" . $value . "'";
+    if($i < $iterations - 1)
+      $updateString .= ", ";
+    $i++;
+  }
+  $query = "UPDATE $table
+            SET $updateString
+            WHERE $conditionField = $condition";
+  return mysqlQuery($query);
 }
