@@ -186,3 +186,229 @@ function updateFields($update, $conditionField, $condition, $table) {
             WHERE $conditionField = $condition";
   return mysqlQuery($query);
 }
+
+/**
+ * Get all friend requests for a user by Id
+ *
+ * @param int $id
+ * @return object
+ */
+function getFriendRequests($id) {
+  $query = "SELECT *
+            FROM friends
+            JOIN person_details
+            ON friends.personId = person_details.personId
+            WHERE friends.friendId = $id
+            AND friends.accepted = 0";
+  $result = mysqlQuery($query);
+  if(!$result) return false;
+  return $result;
+}
+
+/**
+ * Get all friends for a user by Id
+ *
+ * @param int $id
+ * @return object
+ */
+function getFriends($id) {
+  $query = "SELECT (CASE WHEN pdl.personId = '$id' THEN pdr.personId ELSE pdl.personId END) AS friendId,
+            (CASE WHEN pdl.personId = '$id' THEN pdr.firstName ELSE pdl.firstName END) AS firstName,
+            (CASE WHEN pdl.personId = '$id' THEN pdr.lastName ELSE pdl.lastName END) AS lastName,
+            (CASE WHEN pdl.personId = '$id' THEN pdr.bio ELSE pdl.bio END) AS bio
+            FROM friends
+            JOIN person_details pdl
+            ON friends.personId = pdl.personId
+            JOIN person_details pdr
+            ON friends.friendId = pdr.personId
+            WHERE (friends.friendId = '$id' OR friends.personId = '$id')
+            AND friends.accepted = 1";
+  $result = mysqlQuery($query);
+  if(!$result) return false;
+  return $result;
+}
+
+/**
+ * Declines a friend request
+ *
+ * @param int $id
+ * @param int $personId
+ * @return object
+ */
+function declineFriendRequest($id, $personId) {
+  $query = "DELETE FROM friends
+            WHERE personId = $personId
+            AND friendId = $id";
+  return mysqlQuery($query);
+}
+
+/**
+ * Accepts a friend request
+ *
+ * @param int $id
+ * @param int $personId
+ * @return object
+ */
+function acceptFriendRequest($id, $personId) {
+  $query = "UPDATE friends
+            SET accepted = 1
+            WHERE personId = $personId
+            AND friendId = $id";
+  return mysqlQuery($query);
+}
+
+/**
+ * Searches all users for new friends
+ *
+ * @param int $id
+ * @param string $search
+ * @return object
+ */
+function searchUsers($id, $search) {
+  if(strpos($search, " ")) {
+    $split = explode(" ", $search);
+    $firstName = $split[0];
+    $lastName = $split[1];
+  } else {
+    $firstName = $search;
+    $lastName = $search;
+  }
+  $query = "SELECT *
+            FROM person_details
+            WHERE (firstName LIKE '%$search%'OR lastName LIKE '%$search%'
+            OR (firstName LIKE '%$firstName%' AND lastName LIKE '%$lastName%'))
+            AND personId != $id";
+  $result = mysqlQuery($query);
+  if(!$result) return false;
+
+  $people = array();
+  while($row = $result->fetch_assoc()) {
+    $people[] = $row;
+  }
+
+  $query = "SELECT (CASE WHEN personId = '$id' THEN friendId ELSE personId END) AS id
+            FROM friends
+            WHERE (friendId = '$id' OR personId = '$id')";
+  $result = mysqlQuery($query);
+  if(!$result) return false;
+
+  $friends = array();
+  while($row = $result->fetch_assoc()) {
+    $friends[] = $row['id'];
+  }
+
+  $found = array();
+  foreach ($people as $person) {
+    if(!in_array($person['id'], $friends)) {
+      $image = strtolower($person['firstName']) . "-" . $person['id'] . ".jpg";
+      $target_file = "../assets/profilePics/" . $image;
+      if(!file_exists($target_file))
+        $target_file = "../assets/profilePics/placeholder.jpg";
+      $person['profilePic'] = $target_file;
+      $found[] = $person;
+    }
+  }
+
+  function sortByLastName($a, $b) {
+    return $a['lastName'] <=> $b['lastName'];
+  }
+  usort($found, 'sortByLastName');
+
+  return $found;
+}
+
+/**
+ * Creates a friend request
+ *
+ * @param string $prefix
+ * @param int $id
+ * @param string $firstName
+ * @param string $lastName
+ * @return int
+ */
+function addFriendRequest($id, $friendId) {
+  global $con;
+  $stmt = $con->prepare("INSERT INTO friends(personId, friendId) VALUES(?,?)");
+  $stmt->bind_param('ii', $id, $friendId);
+  $stmt->execute();
+  $stmt->close();
+
+  $message = "You have a new friend request!";
+  return addMessageToFeed(-1, $friendId, $message);
+}
+
+/**
+ * Adds a message to a user's feed
+ *
+ * @param int $creatorId
+ * @param int $receiverId
+ * @param string $message
+ * @return int
+ */
+function addMessageToFeed($creatorId, $receiverId, $message) {
+  global $con;
+  $stmt = $con->prepare("INSERT INTO feed(creatorId, receiverId, message) VALUES(?,?,?)");
+  $stmt->bind_param('iis', $creatorId, $receiverId, $message);
+  $stmt->execute();
+  $stmt->close();
+  return $con->insert_id;
+}
+
+/**
+ * Gets the feed for the specified id
+ *
+ * @param int $id
+ * @return array
+ */
+function getFeed($id) {
+  $query = "SELECT *
+            FROM feed
+            WHERE receiverId = $id
+            AND seen = 0";
+  $result = mysqlQuery($query);
+  if(!$result) return -1;
+
+  $feed = array();
+  while($row = $result->fetch_assoc()) {
+    $feedId = $row['id'];
+    $query2 = "SELECT *
+               FROM replies
+               WHERE feedId = $feedId
+               AND seen = 0";
+    $result2 = mysqlQuery($query2);
+    $replies = array();
+    while($row2 = $result2->fetch_assoc()) {
+      $replies[] = $row2;
+    }
+    $row['replies'] = $replies;
+    $feed[] = $row;
+  }
+
+  return $feed;
+}
+
+/**
+ * Marks a feed item as seen
+ *
+ * @param int $id
+ * @return int
+ */
+function dismissFeedItem($id) {
+  $query = "UPDATE feed
+            SET seen = 1
+            WHERE id = $id";
+  return mysqlQuery($query);
+}
+
+/**
+ * Marks a reply item as seen
+ *
+ * @param int $id
+ * @return int
+ */
+function dismissReplyItem($id) {
+  $query = "UPDATE replies
+            SET seen = 1
+            WHERE id = $id";
+  return mysqlQuery($query);
+}

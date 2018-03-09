@@ -14,6 +14,25 @@ html, body {
   padding: 20px 40px;
 }
 
+.visible-xs {
+  display: none;
+}
+
+@media only screen and (max-width: 768px) {
+  #content {
+    padding: 10px 20px 10px 10px;
+  }
+  .btn-lg {
+    padding: 2px 4px;
+  }
+  .hidden-xs {
+    display: none;
+  }
+  .visible-xs {
+    display: block;
+  }
+}
+
 .form-space {
   margin: 20px 0;
 }

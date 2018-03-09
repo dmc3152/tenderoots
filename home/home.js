@@ -23,8 +23,3 @@ function setCount(event) {
   var element = $(event.target);
   console.log(element.val().length);
 }
-
-$(document).ready(function(){
-  var href = window.location.hash;
-  loadPage(href);
-});

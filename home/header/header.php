@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <a class="navbar-brand" href="#/home" onclick="loadPage(this.href)">
+  <a class="navbar-brand" href="#/home">
     <img src="/tenderoots/assets/images/roots-white-logo.png" width="30" height="30" alt="">
     Tenderoots
   </a>
@@ -10,16 +10,19 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
       <li class="nav-item active">
-        <a class="nav-link" href="#/home" onclick="loadPage(this.href)">Profile</a>
+        <a class="nav-link" href="#/home">Profile</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#/feed" onclick="loadPage(this.href)">Feed</a>
+        <a class="nav-link" href="#/feed">Feed</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#/friends" onclick="loadPage(this.href)">Friends</a>
+        <a class="nav-link" href="#/friends">Friends</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="#/family" onclick="loadPage(this.href)">Family</a>
+        <a class="nav-link" href="#/family">Family</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#/search">Search</a>
       </li>
     </ul>
       <span id='greeting'>Hi <?php echo $_SESSION['firstName']; ?>!</span>

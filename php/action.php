@@ -18,7 +18,7 @@ $action = cleanMySQL($_POST['action']);
 switch($action) {
   case "signOut":
     signOut();
-    successNoData();
+    resultNoData(true, null);
     break;
   case "updatePersonField":
     $update = array();
@@ -26,6 +26,90 @@ switch($action) {
     $value = cleanMySQL($_POST['value']);
     $update[$key] = $value;
     updatePersonField($update);
+    break;
+  case "declineFriendRequest":
+    $id = cleanMySQL($_POST['id']);
+    $personId = cleanMySQL($_POST['personId']);
+    $result = declineFriendRequest($id, $personId);
+    if(!$result)
+      resultNoData(false, "There was a problem removing the friend request.");
+    else
+      resultNoData(true, null);      
+    break;
+  case "acceptFriendRequest":
+    $id = cleanMySQL($_POST['id']);
+    $personId = cleanMySQL($_POST['personId']);
+    $result = acceptFriendRequest($id, $personId);
+    if(!$result)
+      resultNoData(false, "There was a problem adding the friend.");
+    else
+      resultNoData(true, null);      
+    break;
+  case "searchUsers":
+    $id = $_SESSION['id'];
+    $value = cleanMySQL($_POST['value']);
+    $result = searchUsers($id, $value);
+    if(!$result)
+      resultNoData(false, "There was a problem finding users.");
+    else {
+      $data = array();
+      $data['success'] = true;
+      $data['results'] = $result;
+      $data['id'] = $id;
+      closeDbConnection();
+      echo json_encode($data);
+      return false;
+    } 
+    break;
+  case "addFriendRequest":
+    $id = cleanMySQL($_POST['id']);
+    $personId = cleanMySQL($_POST['personId']);
+    $result = addFriendRequest($id, $personId);
+    if(!$result)
+      resultNoData(false, "There was a problem sending the friend request.");
+    else
+      resultNoData(true, null);
+    break;
+  case "getFeed":
+    $feed = getFeed($_SESSION['id']);
+    if($feed === -1) {
+      resultNoData(false, "There was a problem getting the feed.");
+    } else {
+      $data = array();
+      $data['success'] = true;
+      $data['feed'] = $feed;
+      closeDbConnection();
+      echo json_encode($data);
+    }
+    break;
+  case "getUserById":
+    $id = cleanMySQL($_POST['id']);
+    $user = getUserById($id);
+    if(!$user)
+      resultNoData(false, "There was a problem getting the user's information.");
+    else {
+      $data = array();
+      $data['success'] = true;
+      $data['user'] = $user;
+      closeDbConnection();
+      echo json_encode($data);
+    }
+    break;
+  case "dismissFeedItem":
+    $id = cleanMySQL($_POST['id']);
+    $result = dismissFeedItem($id);
+    if(!$result)
+      resultNoData(false, "There was a problem dismissing the feed item.");
+    else
+      resultNoData(true, null);      
+    break;
+  case "dismissReplyItem":
+    $id = cleanMySQL($_POST['id']);
+    $result = dismissReplyItem($id);
+    if(!$result)
+      resultNoData(false, "There was a problem dismissing the reply item.");
+    else
+      resultNoData(true, null);      
     break;
   default:
     $data = array();
@@ -36,9 +120,10 @@ switch($action) {
     return false;
 }
 
-function successNoData() {
+function resultNoData($success, $message) {
   $data = array();
-  $data['success'] = true;
+  $data['success'] = $success;
+  $data['message'] = $message;
   closeDbConnection();
   echo json_encode($data);
   return false;

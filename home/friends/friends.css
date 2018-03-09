@@ -1,0 +1,50 @@
+.friend {
+  background-color: white;
+  clear: both;
+  border: 1px solid black;
+  border-radius: 5px;
+  float: left;
+  margin: 5px 10px;
+  width: 96%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.image {
+  position: relative;
+  width: 85px;
+  height: 85px;
+  background-color: purple;
+  float: left;
+  margin-right: 5px;
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+.friend-info {
+  padding: 10px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  z-index: 0 !important;
+}
+
+@media only screen and (max-width: 768px) {
+  .card-title {
+    margin-bottom: 10px;
+  }
+}
+.friends-container {
+  height: 40%;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.btn {
+  z-index: 8 !important;
+}
+
+.friendRequests .friend:last-child {
+  margin-bottom: 30px;
+}
