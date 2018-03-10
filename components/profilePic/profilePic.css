@@ -1,0 +1,21 @@
+.profile-pic-component #profilePic {
+  background-color: white;
+  width: 200px;
+  border: 1px solid black;
+  border-radius: 3px;
+  padding: 2px;
+}
+
+.profile-pic-component #profilePic:hover {
+  cursor: pointer;
+}
+
+.profile-pic-component #hiddenFileInput {
+  display: none;
+}
+
+.profile-pic-component {
+  width: 200px;
+  margin-left: 15px;
+  margin-right: 15px;
+}
