@@ -6,7 +6,6 @@ $data = array();
 $target_dir = "../../assets/profilePics/";
 $target_name = strtolower($_SESSION['firstName']) . "-" . $_SESSION['id'] . ".jpg";
 $target_file = $target_dir . $target_name;
-$imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 $check = getimagesize($_FILES["profilePic"]["tmp_name"]);
 
 // Check if the file is a real image

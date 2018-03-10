@@ -111,6 +111,23 @@ switch($action) {
     else
       resultNoData(true, null);      
     break;
+  case "getMaximumFileUploadSize":
+    $data = array();
+    $data['maxSize'] = getMaximumFileUploadSize();
+    $data['success'] = ($data['maxSize'] > 0);
+    closeDbConnection();
+    echo json_encode($data);
+    break;
+  case "removeImage":
+    $id = $_SESSION['id'];
+    $firstName = $_SESSION['firstName'];
+    $fileName = cleanMySQL($_POST['fileName']);
+    $result = removeImage($fileName, $firstName, $id);
+    if(!$result)
+      resultNoData(false, "The specified file does not exist.");
+    else
+      resultNoData(true, null);
+    break;
   default:
     $data = array();
     $data['errors'] = "The action specified was not valid.";

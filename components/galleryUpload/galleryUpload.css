@@ -1,0 +1,17 @@
+.gallery-upload-component {
+  margin-top: 30px;
+}
+
+.gallery-upload-component ul {
+  list-style-type: none;
+  font-weight: bold;
+  padding: 0;
+}
+
+.gallery-upload-component .error {
+  color: darkred;
+}
+
+.gallery-upload-component .btn-success {
+  margin-top: 10px;
+}

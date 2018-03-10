@@ -7,11 +7,9 @@ $('#hiddenFileInput').on('click touchstart' , function(){
 });
 
 $("#hiddenFileInput").change(function(e) {
-  var fileName = $(this).val().toLowerCase();
-  var ext = fileName.slice(-3, fileName.length);
-  if(ext != 'jpg') {
-    console.log("The file " + fileName + " is not a valid image.");
-    console.log(ext);
+  var file = $(this)[0].files[0];
+  if(!file.type.match(/^image\/(gif|png|jpeg)$/i)) {
+    console.log("The file " + file.name + " is not a valid image. Please choose a gif, png, or jpg");
     return false;
   }
   var form = $('#picUploadForm')[0];

@@ -273,6 +273,16 @@ class ImageManipulator
     }
 
     /**
+     * Frees up memory
+     * 
+     * @return void
+     */
+    public function __destruct()
+    {   
+      imagedestroy($this->image);
+    }
+
+    /**
      * Returns the GD image resource
      *
      * @return resource
