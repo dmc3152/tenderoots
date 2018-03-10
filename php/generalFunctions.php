@@ -3,6 +3,16 @@
 define("BASE_URL", "http://localhost/");  // website hostname
 
 /**
+ * Starts a session if none
+ *
+ * @return void
+ */
+function startSession() {
+  if (session_status() == PHP_SESSION_NONE)
+    session_start();
+}
+
+/**
  * Check if the user is signed in
  *
  * @return boolean

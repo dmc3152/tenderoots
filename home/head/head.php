@@ -9,4 +9,3 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <!-- Main Styles -->
 <link rel="stylesheet" href="./head/head.css">
-<?php session_start(); ?>

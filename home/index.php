@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once("../php/dbFunctions.php");
 require_once("../php/generalFunctions.php");
 if(!isSignedIn()) sendToLogin();
 ?>

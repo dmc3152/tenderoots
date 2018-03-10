@@ -1,6 +1,7 @@
 <?php
-session_start();
+require_once("../../php/generalFunctions.php");
 require_once("../../php/dbFunctions.php");
+startSession();
 connect2db();
 
 function sortByLastName($a, $b) {

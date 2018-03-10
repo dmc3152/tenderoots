@@ -1,5 +1,6 @@
 <?php
-session_start();
+require_once("../php/generalFunctions.php");
+startSession();
 
 $image = strtolower($_SESSION['firstName']) . "-" . $_SESSION['id'] . ".jpg";
 $target_file = "../assets/profilePics/" . $image;

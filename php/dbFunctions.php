@@ -6,16 +6,30 @@
  * @return void
  */
 function connect2db() {
+  global $con;
   // Database variables
   $dbhost = 'localhost';    // Database host
   $dbname = 'tenderoots';    // Database
   $dbuser = 'tr_user'; // Database user
   $dbpasswd = '!7uf6Xo*ZzefluJu';   // Database user password
-  global $con;
 
   // Creating connection to the database
-  $con = new mysqli($dbhost, $dbuser, $dbpasswd, $dbname);
-  if ($con->connect_error) die($con->connect_error);
+  if (!$con || !$con->ping()) {
+    $con = new mysqli($dbhost, $dbuser, $dbpasswd, $dbname);
+    if ($con->connect_error) die($con->connect_error);
+  }
+}
+
+/**
+ * Checks for a connection. Creates connection if none.
+ *
+ * @return void
+ */
+function checkConnection() {
+  global $con;
+  if (!$con->ping()) {
+    connect2db();
+  }
 }
 
 /**
@@ -25,7 +39,9 @@ function connect2db() {
  */
 function closeDbConnection() {
   global $con;
-  $con->close();
+  if ($con && $con->ping()) {
+    $con->close();
+  };
 }
 
 /**
