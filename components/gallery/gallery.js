@@ -18,10 +18,8 @@ $(document).ready(function(){
 
 function openModal(image) {
   $('#galleryModal .modal-body').append("<img src='"+image+"'>");
-  $('#galleryModal').modal('show');
-  // $('#galleryModal').modal({
-  //   backdrop: 'static'
-  // });
+  // $('#galleryModal').modal('show');
+  $('#galleryModal').modal({ backdrop: 'static' });
 }
 
 function closeModal() {

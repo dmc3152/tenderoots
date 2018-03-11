@@ -14,6 +14,7 @@ if(!isSignedIn()) sendToLogin();
     <?php include_once('./header/header.php'); ?>
     <div id="content"></div>
   </div>
+  <?php include_once('../components/reply/reply.php') ?>
   <?php include_once('./foot/foot.php'); ?>
 </body>
 </html>

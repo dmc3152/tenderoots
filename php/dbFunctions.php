@@ -428,3 +428,27 @@ function dismissReplyItem($id) {
             WHERE id = $id";
   return mysqlQuery($query);
 }
+
+/**
+ * Adds a reply to a feed
+ *
+ * @param int $feedId
+ * @param int $creatorId
+ * @param int $message
+ * @return object
+ */
+function addReply($feedId, $creatorId, $message) {
+  global $con;
+  $stmt = $con->prepare("INSERT INTO replies(feedId, creatorId, message) VALUES(?,?,?)");
+  $stmt->bind_param('iis', $feedId, $creatorId, $message);
+  $stmt->execute();
+  $stmt->close();
+  $replyId = $con->insert_id;
+
+  $query = "SELECT *
+            FROM replies
+            WHERE id = $replyId";
+  $result = mysqlQuery($query);
+  if(!$result) return false;
+  return $result->fetch_assoc();
+}

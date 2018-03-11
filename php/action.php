@@ -20,6 +20,7 @@ switch($action) {
     signOut();
     resultNoData(true, null);
     break;
+
   case "updatePersonField":
     $update = array();
     $key = cleanMySQL($_POST['name']);
@@ -27,6 +28,7 @@ switch($action) {
     $update[$key] = $value;
     updatePersonField($update);
     break;
+
   case "declineFriendRequest":
     $id = cleanMySQL($_POST['id']);
     $personId = cleanMySQL($_POST['personId']);
@@ -36,6 +38,7 @@ switch($action) {
     else
       resultNoData(true, null);      
     break;
+
   case "acceptFriendRequest":
     $id = cleanMySQL($_POST['id']);
     $personId = cleanMySQL($_POST['personId']);
@@ -45,6 +48,7 @@ switch($action) {
     else
       resultNoData(true, null);      
     break;
+
   case "searchUsers":
     $id = $_SESSION['id'];
     $value = cleanMySQL($_POST['value']);
@@ -61,6 +65,7 @@ switch($action) {
       return false;
     } 
     break;
+
   case "addFriendRequest":
     $id = cleanMySQL($_POST['id']);
     $personId = cleanMySQL($_POST['personId']);
@@ -70,6 +75,7 @@ switch($action) {
     else
       resultNoData(true, null);
     break;
+
   case "getFeed":
     $feed = getFeed($_SESSION['id']);
     if($feed === -1) {
@@ -82,6 +88,7 @@ switch($action) {
       echo json_encode($data);
     }
     break;
+
   case "getUserById":
     $id = cleanMySQL($_POST['id']);
     $user = getUserById($id);
@@ -95,6 +102,7 @@ switch($action) {
       echo json_encode($data);
     }
     break;
+
   case "dismissFeedItem":
     $id = cleanMySQL($_POST['id']);
     $result = dismissFeedItem($id);
@@ -103,6 +111,7 @@ switch($action) {
     else
       resultNoData(true, null);      
     break;
+
   case "dismissReplyItem":
     $id = cleanMySQL($_POST['id']);
     $result = dismissReplyItem($id);
@@ -111,6 +120,7 @@ switch($action) {
     else
       resultNoData(true, null);      
     break;
+
   case "getMaximumFileUploadSize":
     $data = array();
     $data['maxSize'] = getMaximumFileUploadSize();
@@ -118,6 +128,7 @@ switch($action) {
     closeDbConnection();
     echo json_encode($data);
     break;
+
   case "removeImage":
     $id = $_SESSION['id'];
     $firstName = $_SESSION['firstName'];
@@ -128,6 +139,7 @@ switch($action) {
     else
       resultNoData(true, null);
     break;
+
   case "getThumbnails":
     $id = $_SESSION['id'];
     $firstName = $_SESSION['firstName'];
@@ -141,6 +153,22 @@ switch($action) {
     closeDbConnection();
     echo json_encode($data);
     break;
+
+    case "addReply":
+      $creatorId = $_SESSION['id'];
+      $feedId = cleanMySQL($_POST['feedId']);
+      $message = cleanMySQL($_POST['message']);
+      $result = addReply($feedId, $creatorId, $message);
+      if(!$result)
+        resultNoData(false, "The reply failed to save.");
+      else {
+        $data = array();
+        $data['success'] = true;
+        $data['reply'] = $result;
+        closeDbConnection();
+        echo json_encode($data);
+      }
+      break;
   default:
     $data = array();
     $data['errors'] = "The action specified was not valid.";

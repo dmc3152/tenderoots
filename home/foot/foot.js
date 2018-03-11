@@ -19,7 +19,7 @@ $(window).on('popstate', function (e) {
 
 // Load the correct page
 function loadPage(href) {
-  if(!href) return;
+  if(!href) href = "#/home";
   var route = href.substr(href.indexOf("#/") + 2);
   if(!routes.includes(route))
       window.location.href="#/home";
@@ -41,7 +41,7 @@ function signOut() {
 
   ajaxPost(url, formData, function(data) {
     if(data.success)
-      window.location.href = "http://regis-dev/tenderoots/";
+      window.location.href = "http://localhost/tenderoots/";
   });
 }
 
@@ -64,6 +64,7 @@ function ajaxPost(url, data, callback) {
   }).done(callback);
 }
 
+// Helper functino to upload files
 function uploadFile(url, data, callback) {
   $.ajax({
     type: 'POST',

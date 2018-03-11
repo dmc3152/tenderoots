@@ -1,0 +1,11 @@
+#replyModal textarea {
+  width: 100%;
+  height: 200px;
+  resize: none;
+  overflow: auto;
+  padding: 16px;
+}
+
+#replyModal .modal-body {
+  padding: 0;
+}
