@@ -12,6 +12,7 @@ $user = getUserDetailsById($_SESSION['id']);
   <div class="row">
     <div class="col-sm-12 col-md-4">
       <?php include_once('../components/profilePic/profilePic.php') ?>
+      <?php include_once('../components/gallery/gallery.php') ?>
       <?php include_once('../components/galleryUpload/galleryUpload.php') ?>
   </div>
     <div class="col-sm-12 col-md-8">

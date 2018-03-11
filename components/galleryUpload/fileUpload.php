@@ -6,6 +6,7 @@ $data = array();
 $target_sub_directory = strtolower($_SESSION['firstName']) . "-" . $_SESSION['id'];
 $target_dir = "../../assets/images/$target_sub_directory/";
 $target_thumb_dir = "../../assets/images/$target_sub_directory/thumb/";
+$data['subDirectory'] = $target_sub_directory;
 
 $count = count($_FILES["galleryInput"]["name"]);
 for($i = 0; $i < $count; $i++) {
@@ -35,6 +36,8 @@ for($i = 0; $i < $count; $i++) {
     echo json_encode($data);
     return false;
   }
+
+  $data['thumbnails'][] = $_FILES["galleryInput"]["name"][$i];
 }
 
 // Save image

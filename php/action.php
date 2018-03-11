@@ -128,6 +128,19 @@ switch($action) {
     else
       resultNoData(true, null);
     break;
+  case "getThumbnails":
+    $id = $_SESSION['id'];
+    $firstName = $_SESSION['firstName'];
+    $result = getThumbnails($id, $firstName);
+    if(!$result) resultNoData(false, "Could not retrieve the thumbnails.");
+
+    $data = array();
+    $data['thumbnails'] = $result;
+    $data['subDirectory'] = strtolower($firstName) . "-" . $id;
+    $data['success'] = true;
+    closeDbConnection();
+    echo json_encode($data);
+    break;
   default:
     $data = array();
     $data['errors'] = "The action specified was not valid.";

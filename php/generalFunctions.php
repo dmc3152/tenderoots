@@ -54,6 +54,18 @@ function updatePersonField($update) {
   return true;
 }
 
+function getThumbnails($id, $firstName) {
+  $sub_directory = strtolower($firstName) . "-" . $id;
+  $directory = "../assets/images/$sub_directory/thumb";
+  try {
+    $files = scandir($directory);
+    $thumbnails = array_diff($files, array('.', '..'));
+  } catch(Exception $e) {
+    return false;
+  }
+  return $thumbnails;
+}
+
 function removeImage($fileName, $firstName, $id) {
   $target_sub_directory = strtolower($firstName) . "-" . $id;
   $target_dir = "../../assets/images/$target_sub_directory/";

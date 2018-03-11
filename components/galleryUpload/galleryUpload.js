@@ -49,11 +49,19 @@ function galleryUpload() {
   var data = new FormData(form);
   var url = '/tenderoots/components/galleryUpload/fileUpload.php';
   uploadFile(url, data, function(data) {
-    if(data.success) {
-      console.log("Images Uploaded Successfully!!");
-    } else {
+    if(!data.success) {
       alert(data.error);
+      return;
     }
+    console.log(data);
+    var path = "../assets/images/" + data.subDirectory + "/thumb/";
+    for(var i in data.thumbnails) {
+      var image = path + data.thumbnails[i];
+      $('.gallery-component .images').append("<img src='"+image+"'>");
+    }
+    $('.gallery-upload-component .files').empty();
+    $('.gallery-upload-component form button').remove();
+    $(this).val('');
   });
 }
 
