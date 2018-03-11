@@ -12,7 +12,6 @@ function saveValue(event) {
   };
   
   ajaxPost(url, formData, function(data) {
-    console.log(data);
     if(!data.success)
       alert("Values are not saving.");
   });
@@ -21,5 +20,6 @@ function saveValue(event) {
 // Continue this functionality: set count to charCount for textarea
 function setCount(event) {
   var element = $(event.target);
-  console.log(element.val().length);
+  var count = element.val().length;
+  $('#charCount').html(count);
 }

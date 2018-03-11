@@ -6,6 +6,8 @@ $(document).ready(function(){
   ajaxPost(url, formData, function(data) {
     if(!data.success) return;
     var feed = data.feed;
+    if(feed.length < 1)
+      $('#messages').append("<h3>There are no messages to display.</h3>");
     for(var i in feed)
       addMessage(feed[i]);
   });
@@ -32,6 +34,7 @@ function addMessage(feed) {
     if(!data.success) return;
     var image = data.user.firstName.toLowerCase() + "-" + data.user.personId + ".jpg";
     var sender = {
+      id: data.user.personId,
       name: data.user.firstName + " " + data.user.lastName,
       image: "/tenderoots/assets/profilePics/" + image,
       links: [
@@ -74,10 +77,15 @@ function getSystemFeedData(senderId, feedId) {
 
 function showFeedMessage(sender, date, message, feedId) {
   date = formatDate(date);
+  var title = "";
+  if(sender.id > 0)
+    title = "<a href='#/profile?id="+sender.id+"'>"+sender.name+"</a>";
+  else
+    title = sender.name;
   var card = "<div id='feed-"+feedId+"' class='card'>" +
                 "<img class='feed-img' src='"+sender.image+"'>" +
                 "<div class='card-body'>" +
-                  "<h5 class='card-title'>"+sender.name+"</h5>" +
+                  "<h5 class='card-title'>"+title+"</h5>" +
                   "<h6 class='card-subtitle mb-2 text-muted'>"+date+"</h6>" +
                   "<p class='card-text'>"+message+"</p>";
   for(var i in sender.links) {
@@ -118,6 +126,7 @@ function addReply(reply, feedId) {
     if(!data.success) return;
     var image = data.user.firstName.toLowerCase() + "-" + data.user.personId + ".jpg";
     var sender = {
+      id: data.user.personId,
       name: data.user.firstName + " " + data.user.lastName,
       image: "/tenderoots/assets/profilePics/" + image,
       links: [
@@ -134,7 +143,7 @@ function showReplyMessage(sender, date, message, feedId, replyId) {
   var reply = "<div id='reply-"+replyId+"' class='card'>" +
                 "<img class='reply-img' src='"+sender.image+"'>" +
                 "<div class='card-body'>" +
-                  "<h5 class='card-title'>"+sender.name+"</h5>" +
+                  "<h5 class='card-title'><a href='#/profile?id="+sender.id+"'>"+sender.name+"</a></h5>" +
                   "<h6 class='card-subtitle mb-2 text-muted'>"+date+"</h6>" +
                   "<p class='card-text'>"+message+"</p>";
   for(var i in sender.links) {

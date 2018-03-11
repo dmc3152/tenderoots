@@ -6,13 +6,18 @@ $(document).ready(function(){
     if(data.success) {
       var imagePath = "../assets/images/" + data.subDirectory + "/";
       var thumbPath = "../assets/images/" + data.subDirectory + "/thumb/";
+      if(data.thumbnails.length < 1) {
+        $('.gallery-component').hide();
+      } else {
+        $('.gallery-component').show();
+      }
       for(var i in data.thumbnails) {
         var image = imagePath + data.thumbnails[i];
         var thumb = thumbPath + data.thumbnails[i];
         $('.gallery-component .images').append("<img src='"+thumb+"' onclick='openModal(\""+image+"\");'>");
       }
     } else
-      alert("Could not retrive the gallery.");
+      $('.gallery-component').hide();
   });
 });
 

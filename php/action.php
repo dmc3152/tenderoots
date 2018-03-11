@@ -77,7 +77,15 @@ switch($action) {
     break;
 
   case "getFeed":
-    $feed = getFeed($_SESSION['id']);
+    if(isset($_SESSION['feed'])) {
+      $id = $_SESSION['feed'];
+      $profile = true;
+    }
+    else {
+      $id = $_SESSION['id'];
+      $profile = false;
+    }
+    $feed = getFeed($id, $profile);
     if($feed === -1) {
       resultNoData(false, "There was a problem getting the feed.");
     } else {
@@ -141,18 +149,44 @@ switch($action) {
     break;
 
   case "getThumbnails":
-    $id = $_SESSION['id'];
-    $firstName = $_SESSION['firstName'];
+    $id = "";
+    $firstName = "";
+    if(isset($_SESSION['feed'])) {
+      $id = $_SESSION['feed'];
+      $firstName = $_SESSION['feedName'];
+    }
+    else {
+      $id = $_SESSION['id'];
+      $firstName = $_SESSION['firstName'];
+    }
     $result = getThumbnails($id, $firstName);
-    if(!$result) resultNoData(false, "Could not retrieve the thumbnails.");
-
-    $data = array();
-    $data['thumbnails'] = $result;
-    $data['subDirectory'] = strtolower($firstName) . "-" . $id;
-    $data['success'] = true;
-    closeDbConnection();
-    echo json_encode($data);
+    if(!$result) {
+      resultNoData(false, "Could not retrieve the thumbnails.");
+    } else {
+      $data = array();
+      $data['thumbnails'] = $result;
+      $data['subDirectory'] = strtolower($firstName) . "-" . $id;
+      $data['success'] = true;
+      closeDbConnection();
+      echo json_encode($data);
+    }
     break;
+
+    case "addMessage":
+      $creatorId = $_SESSION['id'];
+      $receiverId = cleanMySQL($_POST['receiverId']);
+      $message = cleanMySQL($_POST['message']);
+      $result = addMessage($creatorId, $receiverId, $message);
+      if(!$result)
+        resultNoData(false, "The message failed to send.");
+      else {
+        $data = array();
+        $data['success'] = true;
+        $data['feed'] = $result;
+        closeDbConnection();
+        echo json_encode($data);
+      }
+      break;
 
     case "addReply":
       $creatorId = $_SESSION['id'];

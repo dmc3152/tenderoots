@@ -1,5 +1,5 @@
 // Accepted routes
-var routes = ["home", "feed", "friends", "family", "search"];
+var routes = ["home", "feed", "friends", "family", "search", "profile"];
 var prevURL = "test";
 
 // Load the correct page on app load
@@ -21,9 +21,15 @@ $(window).on('popstate', function (e) {
 function loadPage(href) {
   if(!href) href = "#/home";
   var route = href.substr(href.indexOf("#/") + 2);
+  var params = "";
+  if(route.indexOf("?") !== -1) {
+    params = "?";
+    params += route.split("?")[1];
+    route = route.split("?")[0];
+  }
   if(!routes.includes(route))
       window.location.href="#/home";
-  var url = route + "/" + route + ".php";
+  var url = route + "/" + route + ".php" + params;
   if(route === "home")
       url = "home.php";
 

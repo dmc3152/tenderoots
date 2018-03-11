@@ -36,6 +36,11 @@ function sendToLogin() {
   exit();
 }
 
+function sendHome() {
+  header("Location: " . BASE_URL . "tenderoots/home/index.php");
+  exit();
+}
+
 function updatePersonField($update) {
   $conditionField = "id";
   $condition = $_SESSION['id'];
@@ -56,7 +61,9 @@ function updatePersonField($update) {
 
 function getThumbnails($id, $firstName) {
   $sub_directory = strtolower($firstName) . "-" . $id;
-  $directory = "../assets/images/$sub_directory/thumb";
+  $user_directory = $_SERVER['DOCUMENT_ROOT'] . "/tenderoots/assets/images/$sub_directory";
+  $directory = "$user_directory/thumb";
+  if(!is_dir($user_directory)) return false;
   try {
     $files = scandir($directory);
     $thumbnails = array_diff($files, array('.', '..'));

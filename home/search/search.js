@@ -20,13 +20,17 @@ $("#searchForm").submit(function(e) {
 });
 
 function showResult(data, id, count) {
+  var bio = data.bio;
+  if(!bio) {
+    bio = "";
+  }
   var userId = "user" + data.id;
   var user =  "<div class='friend' id='" + userId + "'>" +
                 "<img class='image' src='" + data.profilePic + "'>"+
                 "<button class='btn btn-lg btn-success pull-right hidden-xs' onclick='sendFriendRequest("+id+", "+data.id+", "+userId+", "+count+")'>Add Friend</button>" +
                 "<div class='friend-info'>" +
-                  "<h5 class='card-title'>" + data.firstName + " " + data.lastName + "</h5>" +
-                  "<span class='hidden-xs'>" + data.bio + "</span>" +
+                  "<h5 class='card-title'><a href='#/profile?id="+data.id+"'>" + data.firstName + " " + data.lastName + "</a></h5>" +
+                  "<span class='hidden-xs'>" + bio + "</span>" +
                   "<button class='btn btn-sm btn-success pull-left mr-1 visible-xs' onclick='sendFriendRequest("+id+", "+data.id+", "+userId+", "+count+")'>Add Friend</button>" +
                 "</div>" +
               "</div>";

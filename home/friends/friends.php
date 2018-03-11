@@ -46,7 +46,7 @@ usort($friends, 'sortByLastName');
                 <img class='image' src='/tenderoots/assets/profilePics/$image'>
                 <div class='friend-info'>
                   <h5 class='card-title'>
-                    $firstName $lastName
+                    <a href='#/profile?id=$friendId'>$firstName $lastName</a>
                     <button class='btn btn-lg btn-danger pull-right mt-3 hidden-xs' onclick='declineRequest($id, $friendId, " . sizeof($friendRequests) . ")'>Decline</button>
                     <button class='btn btn-lg btn-success pull-right mr-1 mt-3 hidden-xs' onclick='acceptRequest($id, $friendId, \"$lastName\", " . sizeof($friendRequests) . ", " . sizeof($friends) . ")'>Accept</button>
                   </h5>
@@ -78,7 +78,7 @@ usort($friends, 'sortByLastName');
           echo "<div class='friend' id='friend$friendId'>
                   <img class='image' src='/tenderoots/assets/profilePics/$image'>
                   <div class='friend-info'>
-                    <h5 class='card-title'>$firstName $lastName</h5>
+                    <h5 class='card-title'><a href='$/profile?id=$friendId'>$firstName $lastName</a></h5>
                     $bio
                   </div>
                 </div>";

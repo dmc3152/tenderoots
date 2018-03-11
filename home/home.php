@@ -6,6 +6,7 @@ connect2db();
 if(!isSignedIn()) sendToLogin();
 
 $user = getUserDetailsById($_SESSION['id']);
+$editProfilePic = true;
 ?>
 <div class="col-sm-12">
   <h1>Profile</h1>
@@ -49,8 +50,8 @@ $user = getUserDetailsById($_SESSION['id']);
     <div class="col-sm-12">
       <div class="form-group">
         <label for="bio">Tell us a little about yourself</label>
-        <textarea class="form-control" id="bio" name="bio" rows="5" maxlength="500" value="<?php echo $user['bio']; ?>"></textarea>
-        <small id="bioHelp" class="form-text text-muted">Used <span id='charCount'>0</span> out of 500 characters.</small>
+        <textarea class="form-control" id="bio" name="bio" rows="5" maxlength="500"><?php echo $user['bio']; ?></textarea>
+        <small id="bioHelp" class="form-text text-muted">Used <span id='charCount'><?php echo strlen($user['bio']); ?></span> out of 500 characters.</small>
       </div>
     </div>
 </div>

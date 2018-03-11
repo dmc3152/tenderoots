@@ -54,3 +54,17 @@ html, body {
 h1 {
   margin-bottom: 25px;
 }
+
+.clear {
+  clear: both;
+}
+
+.pictures {
+  float: left;
+}
+
+@media only screen and (max-width: 768px) {
+  .pictures {
+    float: none;
+  }
+}

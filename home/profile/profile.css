@@ -1,0 +1,7 @@
+.readOnly .profile-pic-component #profilePic {
+  cursor: default !important;
+}
+
+label {
+  font-weight: bold;
+}

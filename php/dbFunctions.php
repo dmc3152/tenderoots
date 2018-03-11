@@ -114,6 +114,29 @@ function getUserDetailsById($id) {
   return $result->fetch_assoc();
 }
 
+function getProfileById($id) {
+  $query = "SELECT *
+            FROM `person_details`
+            WHERE id = $id";
+  $result = mysqlQuery($query);
+  if(!$result) return false;
+
+  $details = $result->fetch_assoc();
+  if($details['personPrefix'] === "USR")
+    return $details;
+  
+  $personId = $details['personId'];
+  $query = "SELECT *
+            FROM relatives
+            WHERE id = $personId";
+  $result = mysqlQuery($query);
+  if(!$result) return false;
+  $relative = $result->fetch_assoc();
+  $details['creatorId'] = $relative['creatorId'];
+  $details['deathDate'] = $relative['deathDate'];
+  return $details;
+}
+
 /**
  * Gets a user by their email
  *
@@ -376,11 +399,19 @@ function addMessageToFeed($creatorId, $receiverId, $message) {
  * @param int $id
  * @return array
  */
-function getFeed($id) {
-  $query = "SELECT *
-            FROM feed
-            WHERE receiverId = $id
-            AND seen = 0";
+function getFeed($id, $profile) {
+  if($profile) {
+    $query = "SELECT *
+              FROM feed
+              WHERE receiverId = $id
+              AND seen = 0
+              AND creatorId > 0";
+  } else {
+    $query = "SELECT *
+              FROM feed
+              WHERE receiverId = $id
+              AND seen = 0";
+  }
   $result = mysqlQuery($query);
   if(!$result) return -1;
 
@@ -427,6 +458,22 @@ function dismissReplyItem($id) {
             SET seen = 1
             WHERE id = $id";
   return mysqlQuery($query);
+}
+
+function addMessage($creatorId, $receiverId, $message) {
+  global $con;
+  $stmt = $con->prepare("INSERT INTO feed(creatorId, receiverId, message) VALUES(?,?,?)");
+  $stmt->bind_param('iis', $creatorId, $receiverId, $message);
+  $stmt->execute();
+  $stmt->close();
+  $feedId = $con->insert_id;
+
+  $query = "SELECT *
+            FROM feed
+            WHERE id = $feedId";
+  $result = mysqlQuery($query);
+  if(!$result) return false;
+  return $result->fetch_assoc();
 }
 
 /**
