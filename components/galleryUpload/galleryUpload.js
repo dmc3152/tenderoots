@@ -44,7 +44,6 @@ $("#galleryInput").change(function(e) {
 });
 
 function galleryUpload() {
-  console.log("Clicked the button!");
   var form = $('#galleryUploadForm')[0];
   var data = new FormData(form);
   var url = '/tenderoots/components/galleryUpload/fileUpload.php';
@@ -53,7 +52,6 @@ function galleryUpload() {
       alert(data.error);
       return;
     }
-    console.log(data);
     var path = "../assets/images/" + data.subDirectory + "/thumb/";
     for(var i in data.thumbnails) {
       var image = path + data.thumbnails[i];

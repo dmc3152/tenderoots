@@ -15,6 +15,7 @@ if(!isSignedIn()) sendToLogin();
     <div id="content"></div>
   </div>
   <?php include_once('../components/reply/reply.php') ?>
+  <?php include_once('../components/relativeModal/relativeModal.php') ?>
   <?php include_once('./foot/foot.php'); ?>
 </body>
 </html>

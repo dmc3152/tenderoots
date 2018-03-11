@@ -17,7 +17,6 @@ function saveValue(event) {
   });
 }
 
-// Continue this functionality: set count to charCount for textarea
 function setCount(event) {
   var element = $(event.target);
   var count = element.val().length;

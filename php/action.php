@@ -203,6 +203,24 @@ switch($action) {
         echo json_encode($data);
       }
       break;
+
+      case "setProfileId":
+        $_SESSION['profileId'] = cleanMySQL($_POST['profileId']);
+        break;
+
+      case "getFamily":
+        $id = $_SESSION['id'];
+        $result = getFamily($id);
+        if(!$result)
+          resultNoData(false, "There was a problem getting the family.");
+        else {
+          $data = array();
+          $data['success'] = true;
+          $data['family'] = $result;
+          closeDbConnection();
+          echo json_encode($data);
+        }
+        break;
   default:
     $data = array();
     $data['errors'] = "The action specified was not valid.";

@@ -1,11 +1,15 @@
 <?php
 require_once($_SERVER['DOCUMENT_ROOT'] . "/tenderoots/php/generalFunctions.php");
 require_once($_SERVER['DOCUMENT_ROOT'] . "/tenderoots/php/dbFunctions.php");
-if(!isset($_GET['id'])) sendHome();
+if(!isset($_GET['id']) && !isset($_SESSION['profileId'])) sendHome();
 startSession();
 connect2db();
 
-$id = cleanMySQL($_GET['id']);
+if(isset($_GET['id'])) 
+  $id = cleanMySQL($_GET['id']);
+else
+  $id = $_SESSION['profileId'];
+
 $_SESSION['feed'] = $id;
 
 $user = getProfileById($id);

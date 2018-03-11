@@ -172,6 +172,22 @@ function addUser($email, $hash) {
 }
 
 /**
+ * Adds a relative to the database and returns their id
+ *
+ * @param int $creatorId
+ * @param date $deathDate
+ * @return int
+ */
+function addRelative($creatorId, $deathDate) {
+  global $con;
+  $stmt = $con->prepare("INSERT INTO relatives(creatorId, deathDate) VALUES(?,?)");
+  $stmt->bind_param('is', $creatorId, $deathDate);
+  $stmt->execute();
+  $stmt->close();
+  return $con->insert_id;
+}
+
+/**
  * Deletes a user from the database by id
  *
  * @param int $id
@@ -460,6 +476,14 @@ function dismissReplyItem($id) {
   return mysqlQuery($query);
 }
 
+/**
+ * Adds a message to a feed
+ *
+ * @param int $creatorId
+ * @param int $receiverId
+ * @param string $message
+ * @return object
+ */
 function addMessage($creatorId, $receiverId, $message) {
   global $con;
   $stmt = $con->prepare("INSERT INTO feed(creatorId, receiverId, message) VALUES(?,?,?)");
@@ -498,4 +522,87 @@ function addReply($feedId, $creatorId, $message) {
   $result = mysqlQuery($query);
   if(!$result) return false;
   return $result->fetch_assoc();
+}
+
+function getFamily($id) {
+  $query = "SELECT *
+            FROM fathers
+            WHERE personId = $id";
+  $result = mysqlQuery($query);
+  if(!$result) return false;
+  $fatherIds = array();
+  while($row = $result->fetch_assoc()) {
+    $fatherIds[] = $row['fatherId'];
+  }
+
+  $query = "SELECT *
+            FROM mothers
+            WHERE personId = $id";
+  $result = mysqlQuery($query);
+  if(!$result) return false;
+  $motherIds = array();
+  while($row = $result->fetch_assoc()) {
+    $motherIds[] = $row['motherId'];
+  }
+
+  $query = "SELECT *
+            FROM spouses
+            WHERE personId = $id";
+  $result = mysqlQuery($query);
+  if(!$result) return false;
+  $spouseIds = array();
+  while($row = $result->fetch_assoc()) {
+    $spouseIds[] = $row['spouseId'];
+  }
+
+  $query = "SELECT *
+            FROM children
+            WHERE personId = $id";
+  $result = mysqlQuery($query);
+  if(!$result) return false;
+  $childIds = array();
+  while($row = $result->fetch_assoc()) {
+    $childIds[] = $row['childId'];
+  }
+
+  $fathers = array();
+  foreach ($fatherIds as $fid) {
+    $fathers[] = getUserDetailsById($fid);
+  }
+
+  $mothers = array();
+  foreach ($motherIds as $mid) {
+    $mothers[] = getUserDetailsById($mid);
+  }
+
+  $spouses = array();
+  foreach ($spouseIds as $sid) {
+    $spouses[] = getUserDetailsById($sid);
+  }
+
+  $children = array();
+  foreach ($childIds as $cid) {
+    $children[] = getUserDetailsById($cid);
+  }
+
+  $family = array();
+  $family['fathers'] = $fathers;
+  $family['mothers'] = $mothers;
+  $family['spouses'] = $spouses;
+  $family['children'] = $children;
+  return $family;
+}
+
+function addFamilyMember($personId, $relationId, $table) {
+  $relations = array();
+  $relations['fathers'] = "fatherId";
+  $relations['mothers'] = "motherId";
+  $relations['spouses'] = "spouseId";
+  $relations['children'] = "childId";
+  global $con;
+  $stmt = $con->prepare("INSERT INTO $table(personId, ".$relations[$table].") VALUES(?,?)");
+  $stmt->bind_param('ii', $personId, $relationId);
+  $stmt->execute();
+  $stmt->close();
+  return;
 }
